@@ -14,26 +14,26 @@ MongoClient.connect(
 
         const db = client.db('TodoApp');
 
-        // db.collection('Todos').insertOne({
-        //     text: 'Some todo item',
-        //     completed: false
-        // }, (err, result) => {
-        //     if (err) {
-        //         return console.log('Failed to add item', err);
-        //     }
-        //     console.log(JSON.stringify(result.ops, undefined, 2));
-        // });
-
-        db.collection('Users').insertOne({
-            name: 'Evan Pal',
-            age: 24,
-            location: 'Brooklyn, NY'
+        db.collection('Todos').insertOne({
+            text: 'Some todo item',
+            completed: true
         }, (err, result) => {
             if (err) {
-                return console.log('Failed to add user', err);
+                return console.log('Failed to add item', err);
             }
             console.log(JSON.stringify(result.ops, undefined, 2));
-            console.log(result.ops[0]._id.getTimestamp());
         });
+
+        // db.collection('Users').insertOne({
+        //     name: 'Evan Pal',
+        //     age: 24,
+        //     location: 'Brooklyn, NY'
+        // }, (err, result) => {
+        //     if (err) {
+        //         return console.log('Failed to add user', err);
+        //     }
+        //     console.log(JSON.stringify(result.ops, undefined, 2));
+        //     console.log(result.ops[0]._id.getTimestamp());
+        // });
         client.close();
     });
