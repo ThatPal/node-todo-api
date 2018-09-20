@@ -334,26 +334,38 @@ describe('POST /users/login', () => {
                 }).catch(e => done(e));
             });
     });
+});
 
-    // it('should return 400 for invalid credentials', done => {
-    //     let email = 'Not an email';
-    //     let password = '1';
-        
-    //     request(app)
-    //         .post(`/users`)
-    //         .send({email, password})
-    //         .expect(400)
-    //         .end(done);
-    // });
+describe('DELETE /users/me/token', () => {
+    it('should delete auth token on logout', done => {
+        request(app)
+            .delete(`/users/me/token`)
+            .set('x-auth', users[0].tokens[0].token)
+            .expect(200)
+            .end((err, res) => {
+                if (err) {
+                    return done(err);
+                }
+                User.findById(users[0]._id).then(user => {
+                    expect(user.tokens.length).toBe(0);
+                    done();
+                }).catch(e => done(e));
+            });
+    });
 
-    // it('should return 400 for existing email', done => {
-    //     let email = users[0].email;
-    //     let password = 'password123';
-        
-    //     request(app)
-    //         .post(`/users`)
-    //         .send({email, password})
-    //         .expect(400)
-    //         .end(done);
-    // });
+    it('should return 401 on invalid auth token', done => {
+        request(app)
+            .delete(`/users/me/token`)
+            .set('x-auth', 'notatoken')
+            .expect(401)
+            .end((err, res) => {
+                if (err) {
+                    return done(err);
+                }
+                User.findById(users[0]._id).then(user => {
+                    expect(user.tokens[0].token).toBe(users[0].tokens[0].token);
+                    done();
+                }).catch(e => done(e));
+            });
+    });
 });
