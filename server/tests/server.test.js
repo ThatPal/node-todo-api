@@ -128,7 +128,7 @@ describe('DELETE /todos/:id', () => {
                 }
 
                 Todo.findById(hexId).then(todo => {
-                    expect(todo).not.toBeTruthy();
+                    expect(todo).toBeFalsy();
                     done();
                 }).catch(e => done(e));
             });
@@ -208,7 +208,7 @@ describe('PATCH /todos/:id', () => {
             .expect(res => {
                 expect(res.body.todo.text).toBe(update.text);
                 expect(res.body.todo.completed).toBe(false);
-                expect(res.body.todo.completedAt).not.toBeTruthy();
+                expect(res.body.todo.completedAt).toBeFalsy();
                 expect(res.body.todo._creator).toBe(users[1]._id.toHexString());
             })
             .end((err, res) => {
@@ -219,7 +219,7 @@ describe('PATCH /todos/:id', () => {
                 Todo.findById(hexId).then(todo => {
                     expect(todo.text).toBe(update.text);
                     expect(todo.completed).toBe(false);
-                    expect(todo.completedAt).not.toBeTruthy();
+                    expect(todo.completedAt).toBeFalsy();
                     expect(todos[1]._creator).toEqual(users[1]._id);
                     done();
                 }).catch(e => done(e));
@@ -374,7 +374,7 @@ describe('POST /users/login', () => {
             .send({email, password})
             .expect(400)
             .expect(res => {
-                expect(res.header['x-auth']).not.toBeTruthy();
+                expect(res.header['x-auth']).toBeFalsy();
             })
             .end((err, res) => {
                 if (err) {
